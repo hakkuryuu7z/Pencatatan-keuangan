@@ -1,28 +1,46 @@
 <?php
 require_once "../config/database.php";
 if (isset($_POST['regist'])) {
+
+
     $username = $_POST['username'];
     $password = $_POST['password'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
 
     try {
-        $sql = "INSERT iNTO tbmaster_users (user_username,user_email,user_password,user_phone)
-                VALUE (:username, :email, :user_password, :user_phone)";
-        $stmt = $pdo->prepare($sql);
+        $sqli = "SELECT user_username FROM tbmaster_users where user_username = :username";
+        $stmtn = $pdo->prepare($sqli);
 
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':user_password', $password);
-        $stmt->bindParam(':user_phone', $phone);
+        $stmtn->bindParam(':username', $username);
+        $stmtn->execute();
 
-        if ($stmt->execute()) {
-            echo "<script>alert('data berhail di simpan'); window.location='login.php'</script>";
+        if ($stmtn->rowCount() > 0) {
+            echo "<script>alert('username telah digunakan'); window.location='register.php'</script>";
         } else {
-            echo "gagal mengirim data";
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            try {
+                $sql = "INSERT iNTO tbmaster_users (user_username,user_email,user_password,user_phone)
+                VALUES (:username, :email, :user_password, :user_phone)";
+                $stmt = $pdo->prepare($sql);
+
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':user_password', $password_hash);
+                $stmt->bindParam(':user_phone', $phone);
+
+                if ($stmt->execute()) {
+                    echo "<script>alert('data berhail di simpan'); window.location='login.php'</script>";
+                } else {
+                    echo "gagal mengirim data";
+                }
+            } catch (PDOException $e) {
+                echo "Gagal menyimpan data" . $e->getMessage();
+            }
         }
     } catch (PDOException $e) {
-        echo "Gagal menyimpan data" . $e->getMessage();
+        echo "halo hai error manis";
+        echo "<script>console.log(" . $e->getMessage() . ")</script>";
     }
 }
 
