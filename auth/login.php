@@ -11,7 +11,7 @@ if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sqli = "SELECT user_username , user_password FROM tbmaster_users WHERE user_username = :username";
+    $sqli = "SELECT user_username , user_password, usrer_id FROM tbmaster_users WHERE user_username = :username";
     $stmtn = $pdo->prepare($sqli);
 
     $stmtn->bindParam(":username", $username);
@@ -22,6 +22,7 @@ if (isset($_POST['login'])) {
     if ($username == $user['user_username'] && password_verify($password, $user['user_password'])) {
         $_SESSION['login'] = 'true';
         $_SESSION['username_login'] = $username;
+        $_SESSION['user_id'] = $user['usrer_id'];
         header("Location: ../dashboard/index.php");
     } else {
         echo "<script>alert('password atau kata sandi salah'); window.location='login.php'</script>";
