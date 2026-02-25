@@ -1,6 +1,12 @@
 <?php
 require_once("../config/database.php");
 session_start();
+
+if (isset($_SESSION['login'])) {
+    header("Location: ../dashboard/index.php");
+    exit();
+}
+
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -14,6 +20,7 @@ if (isset($_POST['login'])) {
     $user = $stmtn->fetch(PDO::FETCH_ASSOC);
 
     if ($username == $user['user_username'] && password_verify($password, $user['user_password'])) {
+        $_SESSION['login'] = 'true';
         $_SESSION['username_login'] = $username;
         header("Location: ../dashboard/index.php");
     } else {

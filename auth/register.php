@@ -1,5 +1,11 @@
 <?php
 require_once "../config/database.php";
+session_start();
+if (isset($_SESSION['login'])) {
+    header("Location: ../dashboard/index.php");
+    exit();
+}
+
 if (isset($_POST['regist'])) {
 
 
@@ -7,6 +13,7 @@ if (isset($_POST['regist'])) {
     $password = $_POST['password'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
+    $password2 = $_POST['password2'];
 
     try {
         $sqli = "SELECT user_username FROM tbmaster_users where user_username = :username";
@@ -17,6 +24,8 @@ if (isset($_POST['regist'])) {
 
         if ($stmtn->rowCount() > 0) {
             echo "<script>alert('username telah digunakan'); window.location='register.php'</script>";
+        } else if ($password !== $password2) {
+            echo "<script>alert('Konfirmasi password salah'); window.location='register.php'</script>'";
         } else {
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
             try {
@@ -80,6 +89,12 @@ if (isset($_POST['regist'])) {
                                 <label for="password" class="col-sm-4 col-form-label">Password</label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="password2" class="col-sm-4 col-form-label">Konfirmasri Password</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="password2" name="password2" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
