@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Home</a>
+                    <a class="nav-link active" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Features</a>
@@ -22,7 +22,7 @@
 
             <div class="d-flex align-items-center">
                 <span class="navbar-text me-3 text-light">
-                    Halo, <span class="fw-bold text-info"><?= $_SESSION['username_login'] ?>!</span>
+                    <?= $_SESSION['user_role']  ?> , <span class="fw-bold text-info text-uppercase"><?= $_SESSION['username_login'] ?>!</span>
                 </span>
                 <a href="javascript:void(0)" onclick="konfirmasilogout()" class="btn btn-sm btn-outline-danger px-3 rounded-pill">
                     LOGOUT

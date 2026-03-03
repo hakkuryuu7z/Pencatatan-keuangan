@@ -9,7 +9,7 @@ if (!isset($_SESSION['login'])) {
 
 <?php include "../templates/header.php" ?>
 
-<body class="bg-light">
+
     <?php include "../templates/navbar.php" ?>
 
 

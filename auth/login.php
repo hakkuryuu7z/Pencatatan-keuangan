@@ -8,10 +8,10 @@ if (isset($_SESSION['login'])) {
 }
 
 if (isset($_POST['login'])) {
-    $username = $_POST['username'];
+    $username = strtoupper($_POST['username']);
     $password = $_POST['password'];
 
-    $sqli = "SELECT user_username , user_password, usrer_id FROM tbmaster_users WHERE user_username = :username";
+    $sqli = "SELECT user_username , user_password, user_id, user_role FROM tbmaster_users WHERE user_username = :username";
     $stmtn = $pdo->prepare($sqli);
 
     $stmtn->bindParam(":username", $username);
@@ -19,10 +19,11 @@ if (isset($_POST['login'])) {
     $stmtn->execute();
     $user = $stmtn->fetch(PDO::FETCH_ASSOC);
 
-    if ($username == $user['user_username'] && password_verify($password, $user['user_password'])) {
+    if ($username == strtoupper($user['user_username']) && password_verify($password, $user['user_password'])) {
         $_SESSION['login'] = 'true';
         $_SESSION['username_login'] = $username;
-        $_SESSION['user_id'] = $user['usrer_id'];
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_role'] = $user['user_role'];
         header("Location: ../dashboard/index.php");
     } else {
         echo "<script>alert('password atau kata sandi salah'); window.location='login.php'</script>";
@@ -55,7 +56,7 @@ if (isset($_POST['login'])) {
                             <div class="row mb-3">
                                 <label for="username" class="col-sm-4 col-form-label">User</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="username" name="username">
+                                    <input type="text" class="form-control text-uppercase" id="username" name="username">
                                 </div>
                             </div>
                             <div class="row mb-3">

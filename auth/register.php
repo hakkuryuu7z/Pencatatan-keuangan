@@ -82,7 +82,7 @@ if (isset($_POST['regist'])) {
                             <div class="row mb-3">
                                 <label for="username" class="col-sm-4 col-form-label">Username</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <input type="text" class="form-control text-uppercase" id="username" name="username" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
