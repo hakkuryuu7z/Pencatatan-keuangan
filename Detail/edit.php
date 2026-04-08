@@ -6,7 +6,10 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
-include "query_main.php"
+
+
+include "query_edit.php";
+
 
 ?>
 
@@ -21,19 +24,20 @@ include "query_main.php"
                 <div class="card-body p-4 p-md-5">
 
                     <div class="d-flex align-items-center mb-4">
-                        <div class="bg-primary bg-gradient text-white rounded-3 p-3 me-3">
-                            <i class="bi bi-pencil-square fs-3"></i>
+                        <div class="bg-warning bg-gradient text-white rounded-3 p-3 me-3">
+                            <i class="bi bi-eraser-fill fs-3"></i>
                         </div>
                         <div>
-                            <h4 class="fw-bold mb-0">Tambah Catatan</h4>
-                            <p class="text-muted small mb-0">Catat pemasukan atau pengeluaran hari ini</p>
+                            <h4 class="fw-bold mb-0">Edit Catatan</h4>
+                            <p class="text-muted small mb-0"> Edit Catat pemasukan atau pengeluaran </p>
                         </div>
                     </div>
 
-                    <form action="proses_catat.php" method="post">
+                    <form action="proses_edit.php" method="post">
                         <input type="hidden" name="tr_user_id" value="<?= $_SESSION['user_id'] ?>">
+                        <input type="hidden" name="id_tr" value="<?= $transactions['tr_id'] ?>">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nama_transaksi" name="nama_transaksi" placeholder="Contoh: Gaji Bulanan / Beli Bakso" required>
+                            <input type="text" value="<?= $transactions['tr_name'] ?>" class="form-control" id="nama_transaksi" name="nama_transaksi" placeholder="Contoh: Gaji Bulanan / Beli Bakso" required>
                             <label for="nama_transaksi">Nama Transaksi</label>
                         </div>
 
@@ -41,9 +45,13 @@ include "query_main.php"
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <select class="form-select" id="tr_type" name="tr_type" aria-label="Jenis Transaksi" required>
-                                        <option value="" selected disabled>Pilih Jenis</option>
-                                        <option value="income" class="text-success fw-bold">Pemasukan (+)</option>
-                                        <option value="expense" class="text-danger fw-bold">Pengeluaran (-)</option>
+                                        <?php if ($transactions['tr_type'] == 'income'): ?>
+                                            <option value="income" class="text-success fw-bold" selected>Pemasukan (+)</option>
+                                            <option value="expense" class="text-danger fw-bold">Pengeluaran (-)</option>
+                                        <?php else : ?>
+                                            <option value="income" class="text-success fw-bold">Pemasukan (+)</option>
+                                            <option value="expense" class="text-danger fw-bold" selected>Pengeluaran (-)</option>
+                                        <?php endif    ?>
                                     </select>
                                     <label for="tr_type">Tipe Arus Kas</label>
                                 </div>
@@ -51,7 +59,7 @@ include "query_main.php"
 
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="date" class="form-control" id="tanggal" name="tanggal_transaksi" value="<?= date('Y-m-d') ?>" required>
+                                    <input type="date" class="form-control" id="tanggal" name="tanggal_transaksi" value="<?= $transactions['tr_date'] ?>" required>
                                     <label for="tanggal">Tanggal</label>
                                 </div>
                             </div>
@@ -60,9 +68,12 @@ include "query_main.php"
                         <div class="mb-3">
                             <div class="form-floating">
                                 <select class="form-select" id="tr_cat" name="tr_cat" aria-label="Jenis Transaksi" required>
-                                    <option value="" selected disabled>Pilih Kategori</option>
                                     <?php foreach ($kategori as $kat): ?>
-                                        <option value="<?= $kat['cat_id'] ?>" class=" fw-bold"><?= $kat['cat_name'] ?></option>
+                                        <?php if ($kat['cat_id'] == $transactions['tr_categori_id']): ?>
+                                            <option selected value="<?= $kat['cat_id'] ?>" class=" fw-bold"><?= $kat['cat_name'] ?></option>
+                                        <?php else: ?>
+                                            <option value="<?= $kat['cat_id'] ?>" class=" fw-bold"><?= $kat['cat_name'] ?></option>
+                                        <?php endif; ?>
                                     <?php endforeach ?>
                                 </select>
                                 <label for="tr_cat">Tipe Kategori</label>
@@ -76,11 +87,11 @@ include "query_main.php"
                         <label class="form-label small text-muted ms-1">Nominal (Jumlah Uang)</label>
                         <div class="input-group input-group-lg mb-4">
                             <span class="input-group-text bg-light border-end-0 text-muted">Rp</span>
-                            <input type="number" class="form-control border-start-0 ps-0 fw-bold" id="nominal" name="nominal_transaksi" placeholder="0" required>
+                            <input type="number" value="<?= $transactions['tr_nominal'] ?>" class="form-control border-start-0 ps-0 fw-bold" id="nominal" name="nominal_transaksi" placeholder="0" required>
                         </div>
 
                         <div class="form-floating mb-4">
-                            <textarea class="form-control" placeholder="Catatan tambahan..." id="keterangan" name="keterangan" style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Catatan tambahan..." id="keterangan" name="keterangan" style="height: 100px"><?= $transactions['tr_note'] ?></textarea>
                             <label for="keterangan">Keterangan (Opsional)</label>
                         </div>
 
@@ -101,6 +112,5 @@ include "query_main.php"
         </div>
     </div>
 </div>
-
 
 <?php include "../templates/footer.php" ?>

@@ -16,7 +16,7 @@
                     <a class="nav-link" href="../Catat/">Catat</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="../Detail/">Detail</a>
                 </li>
             </ul>
 
