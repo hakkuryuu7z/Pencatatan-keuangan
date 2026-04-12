@@ -1,12 +1,19 @@
 // 1. Ambil elemen canvas dan context
-const canvas = document.getElementById('myChart');
-const ctx = canvas.getContext('2d');
+// PASTIKAN ID DI BAWAH INI ADALAH 'mainChart' (Sesuai dengan HTML kamu)
+const canvasElement = document.getElementById('mainChart');
+const ctx = canvasElement.getContext('2d');
+
+// Fungsi pembantu untuk format Rupiah di sumbu Y
+const formatRupiah = (value) => {
+    if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(1) + ' Jt';
+    if (value >= 1000) return 'Rp ' + (value / 1000).toFixed(0) + ' Rb';
+    return 'Rp ' + value;
+};
 
 // 2. Buat Efek Gradient untuk Pemasukan (Hijau)
-// createLinearGradient(x0, y0, x1, y1)
 let gradientPemasukan = ctx.createLinearGradient(0, 0, 0, 400);
-gradientPemasukan.addColorStop(0, 'rgba(25, 135, 84, 0.4)'); // Lebih pekat di atas
-gradientPemasukan.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); // Transparan di bawah
+gradientPemasukan.addColorStop(0, 'rgba(25, 135, 84, 0.4)');
+gradientPemasukan.addColorStop(1, 'rgba(25, 135, 84, 0.0)');
 
 // 3. Buat Efek Gradient untuk Pengeluaran (Merah)
 let gradientPengeluaran = ctx.createLinearGradient(0, 0, 0, 400);
@@ -16,57 +23,56 @@ gradientPengeluaran.addColorStop(1, 'rgba(220, 53, 69, 0.0)');
 // 4. Settingan visual untuk Pemasukan
 const stylePemasukan = {
     label: 'Pemasukan',
+    yAxisID: 'y', // Berkiblat ke sumbu kiri
     borderColor: '#198754', 
-    backgroundColor: gradientPemasukan, // Pakai gradient di sini
-    borderWidth: 3, // Garis ditebalkan
-    pointBackgroundColor: '#ffffff', // Tengah titik warna putih
-    pointBorderColor: '#198754', // Pinggiran titik warna hijau
+    backgroundColor: gradientPemasukan, 
+    borderWidth: 3, 
+    pointBackgroundColor: '#ffffff',
+    pointBorderColor: '#198754',
     pointBorderWidth: 2,
     pointRadius: 5,
-    pointHoverRadius: 7, // Membesar saat di-hover
-    tension: 0.4, // Melengkung halus
-    fill: true,
-    spanGaps: true // Menghubungkan titik jika ada data yang kosong di tengah
+    tension: 0.4, 
+    fill: true
 };
 
 // 5. Settingan visual untuk Pengeluaran
 const stylePengeluaran = {
     label: 'Pengeluaran',
+    yAxisID: 'y1', // Berkiblat ke sumbu kanan
     borderColor: '#dc3545',
-    backgroundColor: gradientPengeluaran, // Pakai gradient di sini
+    backgroundColor: gradientPengeluaran,
     borderWidth: 3, 
     pointBackgroundColor: '#ffffff',
     pointBorderColor: '#dc3545',
     pointBorderWidth: 2,
     pointRadius: 5,
-    pointHoverRadius: 7,
     tension: 0.4,
-    fill: true,
-    spanGaps: true
+    fill: true
 };
 
-// 6. Buat Chart dengan data default (Bulanan)
+// 6. Buat Chart
 let myChart = new Chart(ctx, {
     type: 'line', 
     data: {
-        labels: chartData.bulanan.labels,
+        // Kita pakai pengaman (?.) biar nggak error kalau datanya kosong
+        labels: chartData?.harian?.labels || [],
         datasets: [
-            { ...stylePemasukan, data: chartData.bulanan.masuk },
-            { ...stylePengeluaran, data: chartData.bulanan.keluar }
+            { ...stylePemasukan, data: chartData?.harian?.masuk || [] },
+            { ...stylePengeluaran, data: chartData?.harian?.keluar || [] }
         ]
     },
     options: {
         responsive: true,
-        maintainAspectRatio: false, // Penting agar chart bisa diresize dengan bebas
+        maintainAspectRatio: false, 
         interaction: {
             mode: 'index', 
             intersect: false,
         },
         plugins: {
             legend: { 
-                position: 'bottom', // Pindahkan legend ke bawah
+                position: 'top', 
                 labels: {
-                    usePointStyle: true, // Ubah kotak legend jadi bulat (lebih modern)
+                    usePointStyle: true, 
                     boxWidth: 8,
                     padding: 20,
                     font: {
@@ -76,16 +82,14 @@ let myChart = new Chart(ctx, {
                 }
             },
             tooltip: {
-                backgroundColor: 'rgba(33, 37, 41, 0.9)', // Warna background tooltip (gelap modern)
+                backgroundColor: 'rgba(33, 37, 41, 0.9)', 
                 titleFont: { size: 13, family: "'Inter', sans-serif" },
                 bodyFont: { size: 14, family: "'Inter', sans-serif", weight: 'bold' },
                 padding: 12,
                 cornerRadius: 8,
-                displayColors: true, // Tampilkan warna dot di dalam tooltip
+                displayColors: true, 
                 callbacks: {
-                    // Update format angka tooltip
                     label: function(context) {
-                        // Gunakan toLocaleString('id-ID') untuk format Rupiah (titik sebagai pemisah ribuan)
                         let formattedValue = Number(context.raw).toLocaleString('id-ID');
                         return context.dataset.label + ': Rp ' + formattedValue;
                     }
@@ -100,35 +104,46 @@ let myChart = new Chart(ctx, {
                     color: '#6c757d'
                 }
             },
-            y: {
+            y: { // SUMBU KIRI (Pemasukan)
+                type: 'linear',
+                display: true,
+                position: 'left',
                 beginAtZero: true,
-                border: { display: false }, // Hilangkan garis tebal sumbu Y (kiri)
-                grid: { 
-                    color: '#e9ecef', // Warna grid abu-abu sangat muda
-                    drawTicks: false // Hilangkan coretan kecil di sumbu Y
-                }, 
+                border: { display: false },
+                grid: { color: '#e9ecef', drawTicks: false }, 
                 ticks: {
-                    padding: 10,
-                    font: { family: "'Inter', sans-serif", size: 12 },
-                    color: '#6c757d',
-                    callback: function(value) {
-                        if (value >= 1000000) return 'Rp ' + (value / 1000000) + ' Jt';
-                        if (value >= 1000) return 'Rp ' + (value / 1000) + ' Rb';
-                        return 'Rp ' + value;
-                    }
+                    color: '#198754', 
+                    callback: (value) => formatRupiah(value)
+                }
+            },
+            y1: { // SUMBU KANAN (Pengeluaran)
+                type: 'linear',
+                display: true,
+                position: 'right',
+                beginAtZero: true,
+                border: { display: false },
+                grid: { drawOnChartArea: false }, 
+                ticks: {
+                    color: '#dc3545', 
+                    callback: (value) => formatRupiah(value)
                 }
             }
         }
     }
 });
 
-// 7. Fungsi Update saat tombol diklik (Tetap sama, termasuk perbaikan class active)
+// 7. Fungsi Update saat tombol diklik
 function updateChart(period, btnElement) {
-    myChart.data.labels = chartData[period].labels;
-    myChart.data.datasets[0].data = chartData[period].masuk;
-    myChart.data.datasets[1].data = chartData[period].keluar;
+    // Ambil data sesuai periode, kalau kosong pakai object kosong
+    const data = chartData[period] || {};
+
+    // Update data grafik (dengan pengaman kalau datanya undefined)
+    myChart.data.labels = data.labels || [];
+    myChart.data.datasets[0].data = data.masuk || [];
+    myChart.data.datasets[1].data = data.keluar || [];
     myChart.update(); 
 
+    // Update Class Aktif di Tombol
     let buttons = btnElement.parentElement.children;
     for (let btn of buttons) {
         btn.classList.remove('btn-secondary', 'active');

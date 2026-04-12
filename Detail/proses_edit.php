@@ -19,7 +19,15 @@ if (isset($_POST['simpan'])) {
     $tr_keterangan = htmlspecialchars($_POST['keterangan']);
     $tr_id         = htmlspecialchars($_POST['id_tr']);
 
+    if ($tr_nominal < 0) {
+        $_SESSION['alert_icon']  = 'error';
+        $_SESSION['alert_title'] = 'nominal tidak boleh -(minus) !';
+        $_SESSION['alert_text']  = 'nominal harus >= 0';
 
+
+        header("Location: index.php");
+        exit();
+    }
     $sql_insert = "UPDATE `tbtr_transactions` SET 
     `tr_categori_id`=:cat_id,
     `tr_type`=:type ,`tr_name`=:nama,

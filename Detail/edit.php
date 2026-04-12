@@ -87,7 +87,7 @@ include "query_edit.php";
                         <label class="form-label small text-muted ms-1">Nominal (Jumlah Uang)</label>
                         <div class="input-group input-group-lg mb-4">
                             <span class="input-group-text bg-light border-end-0 text-muted">Rp</span>
-                            <input type="number" value="<?= $transactions['tr_nominal'] ?>" class="form-control border-start-0 ps-0 fw-bold" id="nominal" name="nominal_transaksi" placeholder="0" required>
+                            <input type="number" value="<?= $transactions['tr_nominal'] ?>" class="form-control border-start-0 ps-0 fw-bold" id="nominal" name="nominal_transaksi" placeholder="0" min="0" oninput="if(this.value < 0) this.value = 0;" required>
                         </div>
 
                         <div class="form-floating mb-4">

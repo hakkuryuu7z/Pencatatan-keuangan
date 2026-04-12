@@ -19,7 +19,7 @@ if (isset($_POST['login'])) {
     $stmtn->execute();
     $user = $stmtn->fetch(PDO::FETCH_ASSOC);
 
-    if ($username == strtoupper($user['user_username']) && password_verify($password, $user['user_password'])) {
+    if ($user && $username == strtoupper($user['user_username']) && password_verify($password, $user['user_password'])) {
         $_SESSION['login'] = 'true';
         $_SESSION['username_login'] = $username;
         $_SESSION['user_id'] = $user['user_id'];

@@ -162,17 +162,19 @@ include "query.php"
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="fw-bold mb-0">Grafik Arus Kas</h5>
-
+                        <div>
+                            <h5 class="fw-bold mb-0">Visualisasi Arus Kas</h5>
+                            <small class="text-muted">Perbandingan Tren Pemasukan & Pengeluaran</small>
+                        </div>
                         <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-outline-secondary" onclick="updateChart('harian', this)">Harian</button>
-                            <button type="button" class="btn btn-secondary active" onclick="updateChart('bulanan', this)">Bulanan</button>
+                            <button type="button" class="btn btn-secondary active" onclick="updateChart('harian', this)">Harian</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="updateChart('bulanan', this)">Bulanan</button>
                             <button type="button" class="btn btn-outline-secondary" onclick="updateChart('tahunan', this)">Tahunan</button>
                         </div>
                     </div>
 
-                    <div style="height: 350px; width: 100%;">
-                        <canvas id="myChart"></canvas>
+                    <div style="height: 400px; width: 100%;">
+                        <canvas id="mainChart"></canvas>
                     </div>
                 </div>
             </div>

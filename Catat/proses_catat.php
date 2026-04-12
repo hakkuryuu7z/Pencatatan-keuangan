@@ -18,6 +18,16 @@ if (isset($_POST['simpan'])) {
     $tr_nominal    = htmlspecialchars($_POST['nominal_transaksi']);
     $tr_keterangan = htmlspecialchars($_POST['keterangan']);
 
+
+    if ($tr_nominal < 0) {
+        $_SESSION['alert_icon']  = 'error';
+        $_SESSION['alert_title'] = 'nominal tidak boleh -(minus) !';
+        $_SESSION['alert_text']  = 'nominal harus >= 0';
+
+
+        header("Location: index.php");
+        exit();
+    }
     $sql_insert = "INSERT INTO TBTR_TRANSACTIONS
                     (tr_user_id, tr_categori_id, tr_type, tr_name, tr_nominal, tr_date, tr_note) 
                    VALUES 
