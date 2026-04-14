@@ -6,7 +6,14 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
-include "query_main.php"
+include "query_main.php";
+
+if (isset($_SESSION['page_dashboard'])) {
+    unset($_SESSION['page_dashboard']);
+    $_SESSION['page_catat'] = true;
+} else {
+    $_SESSION['page_catat'] = true;
+}
 
 ?>
 

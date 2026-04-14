@@ -23,9 +23,20 @@ if (isset($_POST['regist'])) {
         $stmtn->execute();
 
         if ($stmtn->rowCount() > 0) {
-            echo "<script>alert('username telah digunakan'); window.location='register.php'</script>";
+            $_SESSION['alert_icon']  = 'error';
+            $_SESSION['alert_title'] = 'REGISTER GAGAL !';
+            $_SESSION['alert_text']  = 'Username sudah digunakan';
+
+            header("Location: register.php");
+            exit();
         } else if ($password !== $password2) {
-            echo "<script>alert('Konfirmasi password salah'); window.location='register.php'</script>'";
+            $_SESSION['alert_icon']  = 'error';
+            $_SESSION['alert_title'] = 'REGISTER GAGAL !';
+            $_SESSION['alert_text']  = 'KONFIRMASI PASSWORD SALAH ';
+
+
+            header("Location: register.php");
+            exit();
         } else {
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
             try {
@@ -39,7 +50,13 @@ if (isset($_POST['regist'])) {
                 $stmt->bindParam(':user_phone', $phone);
 
                 if ($stmt->execute()) {
-                    echo "<script>alert('data berhail di simpan'); window.location='login.php'</script>";
+                    $_SESSION['alert_icon']  = 'success';
+                    $_SESSION['alert_title'] = 'Register Success !';
+                    $_SESSION['alert_text']  = 'Register Berhasil di lakukan';
+
+
+                    header("Location: index.php");
+                    exit();
                 } else {
                     echo "gagal mengirim data";
                 }
@@ -167,7 +184,4 @@ if (isset($_POST['regist'])) {
             </div>
         </div>
     </div>
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <?php include "../templates/footer.php" ?>

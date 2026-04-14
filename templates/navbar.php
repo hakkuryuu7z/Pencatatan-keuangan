@@ -1,3 +1,6 @@
+<?php
+
+?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom shadow-sm py-3" style="background-color: #1a1d20 !important;">
     <div class="container"> <a class="navbar-brand fw-bold fs-4" href="#">
             <i class="bi bi-wallet2 me-2"></i>Catat Uang
@@ -10,10 +13,10 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link active" href="../dashboard/">Home</a>
+                    <a class="<?php echo isset($_SESSION['page_dashboard']) ? 'nav-link active' : 'nav-link'; ?>" href="../dashboard/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Catat/">Catat</a>
+                    <a class="<?php echo isset($_SESSION['page_catat']) ? 'nav-link active' : 'nav-link'; ?>" href="../Catat/">Catat</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../Detail/">Detail</a>

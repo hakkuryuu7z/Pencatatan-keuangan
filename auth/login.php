@@ -26,7 +26,13 @@ if (isset($_POST['login'])) {
         $_SESSION['user_role'] = $user['user_role'];
         header("Location: ../dashboard/index.php");
     } else {
-        echo "<script>alert('password atau kata sandi salah'); window.location='login.php'</script>";
+        $_SESSION['alert_icon']  = 'error';
+        $_SESSION['alert_title'] = 'LOGIN GAGAL !';
+        $_SESSION['alert_text']  = 'username atau password salah';
+
+
+        header("Location: index.php");
+        exit();
     }
 }
 
@@ -114,7 +120,4 @@ if (isset($_POST['login'])) {
         </div>
     </div>
 
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <?php include "../templates/footer.php" ?>

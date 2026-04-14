@@ -6,7 +6,15 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
-include "query.php"
+include "query.php";
+if (isset($_SESSION['page_catat'])) {
+    unset($_SESSION['page_catat']);
+    $_SESSION['page_dashboard'] = true;
+} else {
+    $_SESSION['page_dashboard'] = true;
+}
+
+
 ?>
 
 <?php include "../templates/header.php" ?>
