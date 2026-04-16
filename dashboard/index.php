@@ -10,6 +10,9 @@ include "query.php";
 if (isset($_SESSION['page_catat'])) {
     unset($_SESSION['page_catat']);
     $_SESSION['page_dashboard'] = true;
+} else if (isset($_SESSION['page_detail'])) {
+    unset($_SESSION['page_detail']);
+    $_SESSION['page_dashboard'] = true;
 } else {
     $_SESSION['page_dashboard'] = true;
 }

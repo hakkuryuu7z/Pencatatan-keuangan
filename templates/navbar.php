@@ -19,7 +19,7 @@
                     <a class="<?php echo isset($_SESSION['page_catat']) ? 'nav-link active' : 'nav-link'; ?>" href="../Catat/">Catat</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Detail/">Detail</a>
+                    <a class="<?php echo isset($_SESSION['page_detail']) ? 'nav-link active' : 'nav-link'; ?>" href="../Detail/">Detail</a>
                 </li>
             </ul>
 

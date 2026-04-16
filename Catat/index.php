@@ -11,6 +11,9 @@ include "query_main.php";
 if (isset($_SESSION['page_dashboard'])) {
     unset($_SESSION['page_dashboard']);
     $_SESSION['page_catat'] = true;
+} else if (isset($_SESSION['page_detail'])) {
+    unset($_SESSION['page_detail']);
+    $_SESSION['page_catat'] = true;
 } else {
     $_SESSION['page_catat'] = true;
 }

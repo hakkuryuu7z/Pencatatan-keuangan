@@ -27,7 +27,7 @@ $sql_riwayat = "SELECT
     DATE_FORMAT(tr_date, '%d %b %Y') AS tanggal_transaksi
 FROM tbtr_transactions
 WHERE tr_user_id = :userid
-ORDER BY tr_date DESC
+ORDER BY tr_created_at DESC
     ";
 
 $stmt2 = $pdo->prepare($sql_riwayat);

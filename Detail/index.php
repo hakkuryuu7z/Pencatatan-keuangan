@@ -8,6 +8,17 @@ if (!isset($_SESSION['login'])) {
 
 
 include "query_main.php";
+
+if (isset($_SESSION['page_dashboard'])) {
+    unset($_SESSION['page_dashboard']);
+
+    $_SESSION['page_detail'] = true;
+} else if (isset($_SESSION['page_catat'])) {
+    unset($_SESSION['page_catat']);
+    $_SESSION['page_detail'] = true;
+} else {
+    $_SESSION['page_detail'] = true;
+}
 ?>
 
 <?php include "../templates/header.php" ?>
